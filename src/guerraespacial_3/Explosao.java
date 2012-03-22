@@ -10,16 +10,22 @@ public class Explosao extends GameObject {
     protected Sprite sprite;
     private int frame;
     private int timeElapsedInMiliseconds;
-
+    private boolean desativado;
     public Explosao(int x, int y){
         this.x = x;
         this.y = y;
-        this.frame = 0;        
+        this.frame = 0;       
+        this.desativado = false;
     }
-
+    public boolean isDesativado(){
+        return this.desativado;
+    }
     public void step(long timeElapsed) {
         if(this.frame >= 16){
-            return; //Parou animação
+            this.desativado = true;
+        }
+        if(this.desativado){
+            return;
         }
 
         this.timeElapsedInMiliseconds += timeElapsed;

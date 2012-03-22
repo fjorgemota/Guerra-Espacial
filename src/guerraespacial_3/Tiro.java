@@ -10,18 +10,27 @@ public class Tiro extends ObjetoComMovimento{
     boolean desativado;
     Direcao direcao;
     int velocidade;
-    
+    int perda_vida;
+    int maxTempo = 10000;
+    int atualTempo = 0;
     public Tiro(int x, int y, Direcao direcao){
         this.desativado = false;
         this.x = x;
         this.y = y;
         this.direcao = direcao;
         this.velocidade = 20;
+        this.perda_vida = 10;
     }
-
+    public boolean isDesativado(){
+        return this.desativado;
+    }
     public void step(long timeElapsed) {
         if(this.desativado){
             return;
+        }
+        this.atualTempo += timeElapsed;
+        if(this.atualTempo>this.maxTempo){
+            this.desativado = true;
         }
         switch(this.direcao){
             case DIREITA:
@@ -49,6 +58,19 @@ public class Tiro extends ObjetoComMovimento{
                 this.moveEsquerdaBaixo( this.velocidade );
                 break;
         }
+        if(this.x>800){
+            this.x = 0;
+        }
+        else if(this.y > 600){
+            this.y = 0;
+        }
+        else if(this.x < 0){
+            this.x = 800;   
+        }
+        else if(this.y < 0){
+            this.y = 600;
+        }
+            
     }
 
     @Override
