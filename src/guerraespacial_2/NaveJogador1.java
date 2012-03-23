@@ -14,8 +14,9 @@ public class NaveJogador1 extends ObjetoComMovimento {
 
     //Só pode lançar um tiro após o outro com um intervalo de 10 frames.
     int controleTiros = 0;
-    int framesContoleTiros = 5;
-
+    int controleSuperTiro = 0;
+    int framesControleTiros = 5;
+    int framesControleSuperTiros = 30;
     public NaveJogador1() {
 
         try {            
@@ -31,6 +32,7 @@ public class NaveJogador1 extends ObjetoComMovimento {
 
     public void step(long timeElapsed){
         this.controleTiros++;
+        this.controleSuperTiro++;
         Keyboard teclado = GameEngine.getInstance().getKeyboard();                   
 
         if( teclado.keyDown( Keys.ESQUERDA ) && teclado.keyDown( Keys.CIMA) ){
@@ -67,7 +69,9 @@ public class NaveJogador1 extends ObjetoComMovimento {
 
         }
     }
-
+    public void morre(){
+        this.vida -= 1;
+    }
     public void draw(Graphics g) {        
         g.setColor(Color.white);
         g.drawString(this.vida+"", this.x+5, this.y-15);
@@ -76,7 +80,7 @@ public class NaveJogador1 extends ObjetoComMovimento {
     }
 
      public boolean podeAtirar(){
-        return (this.controleTiros > this.framesContoleTiros);
+        return (this.controleTiros > this.framesControleTiros);
     }
 
     public Tiro getTiro(){
@@ -116,9 +120,14 @@ public class NaveJogador1 extends ObjetoComMovimento {
                 yTiro += tamanhoNave;
                 break;
         }
-
-        this.controleTiros = 0;
-        return new Tiro(xTiro, yTiro, this.direcao);
+        if(this.controleSuperTiro>this.framesControleSuperTiros){
+            this.controleSuperTiro = 0;
+            return new SuperTiro(xTiro, yTiro, this.direcao);
+        }
+        else{
+            this.controleTiros = 0;
+            return new Tiro(xTiro, yTiro, this.direcao);
+        }
     }
     
     public Rectangle getRetangulo(){

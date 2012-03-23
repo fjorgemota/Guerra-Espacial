@@ -7,6 +7,7 @@ package javaPlay;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.HashMap;
 
 /**
  * @author VisionLab/PUC-Rio
@@ -19,12 +20,14 @@ public class Sprite
     private int animFrameWidth;
     private int animFrameHeight;
     private int MAX_COUNT = 50;
-
+    protected static HashMap<String, Image> imagesCache = new HashMap<String, Image>();
     public Sprite(String filename, int animFrameCount, int animFrameWidth,
             int animFrameHeight) throws Exception
     {
-        image = Toolkit.getDefaultToolkit().getImage(filename);
-
+        if(!Sprite.imagesCache.containsKey(filename)){
+            Sprite.imagesCache.put(filename,Toolkit.getDefaultToolkit().getImage(filename));
+        }
+        image = Sprite.imagesCache.get(filename);
         int count = 0;
 
         while(image.getWidth(null) == -1)
